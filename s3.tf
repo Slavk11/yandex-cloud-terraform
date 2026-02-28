@@ -35,8 +35,8 @@ resource "yandex_storage_object" "output" {
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
   // Обратите внимание как мы обращаемся к другим ресурсам - через точку
-  bucket = yandex_storage_bucket.bucket.id //У ресурса yandex_storage_bucket есть атрибут .id 
-  key    = "output.txt"
+  bucket  = yandex_storage_bucket.bucket.id //У ресурса yandex_storage_bucket есть атрибут .id 
+  key     = "output.txt"
   content = local_file.example.content
 }
 
@@ -46,7 +46,7 @@ resource "yandex_storage_bucket" "bucket-2" {
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
 
-  bucket = "devopstrain-learning-bucket-100" // Имя должно быть таким же как мы указали в yc только что
+  bucket = var.state_bucket // Имя должно быть таким же как мы указали в yc только что
   acl    = "private"
 
   versioning {
