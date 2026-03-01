@@ -4,16 +4,15 @@ data "yandex_compute_image" "ubuntu-2204-latest" {
 
 # Загрузочный диск
 resource "yandex_compute_instance" "first-vm" {
-  count = length(var.instances)
-  name = var.instances[count.index]
+  for_each = var.instances
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
   folder_id = "b1g4ds9atfpt1vham7p0"
 
   resources {
-    cores         = var.first_vm_compute_resources.cores
-    core_fraction = var.first_vm_compute_resources.core_fraction
-    memory        = var.first_vm_compute_resources.memory
+    cores         = each.value.cores
+    core_fraction = each.value.core_fraction
+    memory        = each.value.memory
   }
 
   boot_disk {
@@ -22,9 +21,6 @@ resource "yandex_compute_instance" "first-vm" {
     }
   }
 
-  secondary_disk {
-    disk_id = yandex_compute_disk.secondary-disk-first-vm[count.index].id
-  }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-a.id
@@ -47,10 +43,11 @@ resource "yandex_compute_instance" "first-vm" {
 
 # Второй диск 
 resource "yandex_compute_disk" "secondary-disk-first-vm" {
-  count = length(var.instances)
-  name = "secondary-disk-${var.instances[count.index]}"
+  for_each = var.instances
+  name = "secondary-disk-${each.key}"
   folder_id = "b1g4ds9atfpt1vham7p0"
   type = "network-hdd"
   zone = "ru-central1-a"
   size = 20
 }
+

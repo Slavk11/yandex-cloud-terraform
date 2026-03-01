@@ -10,3 +10,11 @@ resource "local_file" "example" {
     key2 = data.external.example.result.desc
   })
 }
+
+locals {
+  common_tags = {
+    Project     = "DevOps-Training"
+    Environment = "Learning"
+    Terraform   = "true"
+  }
+}
