@@ -4,8 +4,8 @@ data "external" "example" {
 }
 
 resource "local_file" "example" {
-  filename = "output.txt"
-  content = templatefile("template.tpl", {
+  filename = "output-${terraform.workspace}.txt"
+  content  = templatefile("templates/template.tpl", {
     key1 = data.external.example.result.name
     key2 = data.external.example.result.desc
   })
