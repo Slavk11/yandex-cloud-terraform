@@ -17,31 +17,6 @@ resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
   description        = "static access key for object storage"
 }
 
-// Создадим сам bucket
-resource "yandex_storage_bucket" "bucket" {
-  access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
-  secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
-
-  bucket = "devopstrain-learning-bucket-hex" // Измените это имя слегка, т.к. оно должно быть уникальным
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
-}
-
-// И добавим файл в бакет на основе ранее созданных ресурсов
-resource "yandex_storage_object" "output" {
-  access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
-  secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
-  // Обратите внимание как мы обращаемся к другим ресурсам - через точку
-  bucket  = yandex_storage_bucket.bucket.id //У ресурса yandex_storage_bucket есть атрибут .id 
-  key     = "output.txt"
-  content = local_file.example.content
-}
-
-//... выше ранее созданные ресурсы
-
 # Оставляем это только в ОДНОМ месте (например, в s3.tf)
 resource "yandex_storage_bucket" "bucket-2" {
   # 1. Ключи доступа (взяли из первого куска)
