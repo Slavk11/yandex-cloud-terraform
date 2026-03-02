@@ -1,6 +1,6 @@
 // Создадим сервисный аккаунт
 resource "yandex_iam_service_account" "sa" {
-  name      = "tf-test-sa"
+  name      = "tf-test-sa-${terraform.workspace}"
   folder_id = var.folder_id
 }
 
@@ -23,8 +23,7 @@ resource "yandex_storage_bucket" "bucket-2" {
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
 
-  # 2. Имя бакета (именно то, которое ждет система)
-  bucket = "devopstrain-learning-bucket-100"
+  bucket = "devopstrain-learning-bucket-${terraform.workspace}-2"
   acl    = "private"
 
   # 3. Правила жизненного цикла (взяли из второго куска)
@@ -47,3 +46,5 @@ resource "yandex_storage_bucket" "bucket-2" {
 
   tags = local.common_tags
 }
+
+
