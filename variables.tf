@@ -61,24 +61,9 @@ variable "subnet_params" {
   }
 
   variable "instances" {
-      type    = map(object({
-        cores = number
-        core_fraction = number
-        memory = number
-      }))
-      default = {
-        instance1 = {
-          cores = 2
-          core_fraction = 5
-          memory = 2
-        }
-        instance2 = {
-          cores = 4
-          core_fraction = 20
-          memory = 4
-        }
-      }
-    }
+  type    = list(string)
+  default = ["instance-1", "instance-2"] 
+}
 
 variable "bucket_lifecycle_rules" {
   default = [

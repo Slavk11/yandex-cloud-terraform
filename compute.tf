@@ -4,18 +4,19 @@ data "yandex_compute_image" "ubuntu-2204-latest" {
 
 # Загрузочный диск
 resource "yandex_compute_instance" "first-vm" {
-  for_each = var.instances
 
-  name = "${each.key}-${terraform.workspace}"
+  count = length(var.instances)
+  name = "${var.instances[count.index]}-${terraform.workspace}"
 
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
+
   folder_id = "b1g4ds9atfpt1vham7p0"
 
   resources {
-    cores         = each.value.cores
-    core_fraction = each.value.core_fraction
-    memory        = each.value.memory
+    cores         = var.first_vm_compute_resources.cores
+    core_fraction = var.first_vm_compute_resources.core_fraction
+    memory        = var.first_vm_compute_resources.memory
   }
 
   boot_disk {
@@ -46,13 +47,12 @@ resource "yandex_compute_instance" "first-vm" {
 
 # Второй диск 
 resource "yandex_compute_disk" "secondary-disk-first-vm" {
-  for_each = var.instances
-  
-  name = "secondary-disk-${each.key}-${terraform.workspace}"
 
-  folder_id = "b1g4ds9atfpt1vham7p0"
-  type = "network-hdd"
-  zone = "ru-central1-a"
-  size = 20
+  count = length(var.instances)
+  name     = "disk-name-${terraform.workspace}-${var.instances[count.index]}"
+  type     = "network-hdd"
+  zone     = "ru-central1-a"
+  size     = 20 
+  
 }
 
