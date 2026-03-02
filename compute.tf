@@ -2,18 +2,6 @@ data "yandex_compute_image" "ubuntu-2204-latest" {
   family = "ubuntu-2204-lts"
 }
 
-///
-resource "yandex_compute_disk" "secondary-disk-first-vm" {
-  count = length(var.instances)
-  name     = "disk-name-${terraform.workspace}-${var.instances[count.index]}"
-  type     = "network-hdd"
-  zone     = "ru-central1-a"
-  size     = 20 
-}
-
-
-///
-
 # Загрузочный диск
 resource "yandex_compute_instance" "first-vm" {
   for_each = var.instances
