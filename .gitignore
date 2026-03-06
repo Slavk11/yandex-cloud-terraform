@@ -1,5 +1,23 @@
-.terraform/
-*.tfstate*
-.terraformrc
-terraform.tfvars
+# Игнорируем .terraform во всех папках
+**/.terraform/
+**/.terraform.lock.hcl
+
+# Игнорируем логи и временные файлы
+*.log
+tfplan
+
+# Скрытые папки Terraform
+**/.terraform/
 .terraform.lock.hcl
+
+# Файлы состояния (стейт) — САМОЕ ВАЖНОЕ
+*.tfstate
+*.tfstate.*
+errored.tfstate
+
+# Переменные с секретами
+*.tfvars
+*.tfvars.json
+
+# Логи
+*.log
