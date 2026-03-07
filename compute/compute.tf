@@ -27,7 +27,7 @@ resource "yandex_compute_instance" "first-vm" {
 
 
   network_interface {
-    subnet_id = data.terraform_remote_state.networking.outputs.subnet-id
+    subnet_id = values(module.yc-vpc.private_subnets)[0].subnet_id
   }
 
   metadata = {
